@@ -8,10 +8,11 @@ namespace Przelewy24InrernalTools.Crc
 {
     public enum VariationName
     {
-        plain,
+        plain,  // when parameter is correctly entered
         spaceBefore,
         spaceAfter,
         spaceBoth,
-        omnited
+        omnited,    // when paramether was totaly omnited
+        empty   // when paramether is an empty string ""
     }
 }

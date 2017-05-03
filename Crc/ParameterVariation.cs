@@ -7,7 +7,7 @@ using Przelewy24;
 
 namespace Przelewy24InrernalTools.Crc
 {
-    class ParameterVariation
+    public class ParameterVariation
     {
         #region Properties
 
@@ -57,6 +57,16 @@ namespace Przelewy24InrernalTools.Crc
                     this.VariationValue = " " + value + " ";
                     break;
                 }
+                case (VariationName.empty):
+                {
+                    this.VariationValue = "";
+                    break;
+                }
+                default:
+                {
+                    throw new ApplicationException("Error during creation Parametar Variation - it was used unsupported enum value: "
+                        + variation.ToString());
+                }
             }
         }
 
@@ -73,14 +83,28 @@ namespace Przelewy24InrernalTools.Crc
         {
             List<ParameterVariation> variations = new List<ParameterVariation> ();
 
-            for (int i = 0; i < 5; i++)
+            var variationNames = Enum.GetValues(typeof(VariationName));
+            foreach(var variationName in variationNames)
             {
-                variations.Add (new ParameterVariation (name, value, (VariationName)i));
+                variations.Add(new ParameterVariation(name, value, (VariationName)variationName));
             }
+
+
+            //for (int i = 0; i < 6; i++)
+            //{
+            //    variations.Add (new ParameterVariation (name, value, (VariationName)i));
+            //}
 
             return variations.ToArray ();
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            string result = string.Format("ParameterName = {0}, ParameterValue = {1}, Variation = {2}, VariationValuee = {3}",
+                this.ParameterName, this.ParameterValue, this.Variation.ToString(), this.VariationValue);
+            return result;
+        }
     }
 }
