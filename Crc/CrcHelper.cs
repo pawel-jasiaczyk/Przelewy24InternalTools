@@ -30,19 +30,6 @@ namespace Przelewy24InrernalTools.Crc
             Errors = new ParameterVariation[0];
         }
 
-        //private string[] ParameterVariations(string parameter)
-        //{
-        //    List<string> variations = new List<string>();
-
-        //    variations.Add(parameter);
-        //    variations.Add(parameter + " ");
-        //    variations.Add(" " + parameter);
-        //    variations.Add("");
-        //    variations.Add(null);
-
-        //    return variations.ToArray();
-        //}
-
         public static ParameterVariation[] FindBugInRegisterSign32(string testedSign, string merchantId, string sessionId, string amount, string currency, string crc)
         {
             CrcHelper helper = new CrcHelper
@@ -63,31 +50,23 @@ namespace Przelewy24InrernalTools.Crc
         {
             bool result = false;
             // List<ParameterVariation> errors = new List<ParameterVariation> ();
-            List<Parameter> parameters = new List<Parameter> ();
+            List<ParameterVariation> parameters = new List<ParameterVariation> ();
             
-            parameters.Add (new Parameter ("p24_session_id", this.P24_session_id));
-            parameters.Add (new Parameter ("p24_merchant_id", this.P24_merchant_id));
-            parameters.Add (new Parameter ("p24_amount", this.P24_amount));
-            parameters.Add (new Parameter ("p24_currency", this.P24_currency));
-            parameters.Add (new Parameter ("crckey", this.CrcKey));
+            parameters.Add (new ParameterVariation ("p24_session_id", this.P24_session_id));
+            parameters.Add (new ParameterVariation ("p24_merchant_id", this.P24_merchant_id));
+            parameters.Add (new ParameterVariation ("p24_amount", this.P24_amount));
+            parameters.Add (new ParameterVariation ("p24_currency", this.P24_currency));
+            parameters.Add (new ParameterVariation ("crckey", this.CrcKey));
 
             this.variations = new ParameterVariation[5][];
             for(int i = 0; i < 5; i++)
             {
-                variations[i] = ParameterVariation.GetAllVariations(parameters[i]);
+                variations[i] = ParameterVariation.GetAllVariations(parameters[i].Parameter);
             }
 
             string test = "";
+            //string[] test = new string[5];
             RecuringTestSequence(0, test);
-
-            // ten fragment trzeba zapisać rekurencyjnie
-            //for(int i =0; i < variations.Length; i++)
-            //{
-            //    for(int j = 0; j < variations[i].Length; j++)
-            //    {
-            //        string variationHash = Przelewy24.Przelewy24.
-            //    }
-            //}
 
             return result;
         }

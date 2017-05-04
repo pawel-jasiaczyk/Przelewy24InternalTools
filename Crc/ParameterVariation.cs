@@ -15,51 +15,72 @@ namespace Przelewy24InrernalTools.Crc
         public VariationName Variation { get; private set; }
         public string ParameterValue { get; private set; }
         public string VariationValue { get; private set; }
+        public bool DoTest { get; set; }
+        public Przelewy24.Parameter Parameter { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public ParameterVariation (Parameter parameter, VariationName variation)
-            : this (parameter.Name, parameter.Value, variation)
+        public ParameterVariation(Przelewy24.Parameter parameter) 
+            : this(parameter, VariationName.plain)
         { }
 
-        public ParameterVariation (string name, string value, VariationName variation)
+        public ParameterVariation(string name, string value) 
+            : this(name, value, VariationName.plain)
+        { }
+        
+        public ParameterVariation (Przelewy24.Parameter parameter, VariationName variation)
         {
-            this.ParameterName = name;
-            this.ParameterValue = value;
+            this.Parameter = parameter;
+            this.ParameterName = parameter.Name;
+            this.ParameterValue = parameter.Value;
             this.Variation = variation;
+            this.VariationValue = GetSpecifiedVariationValue(variation);
+        }
 
+        public ParameterVariation (string name, string value, VariationName variation)
+            : this(new Przelewy24.Parameter(name, value), variation)
+        {
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public string GetSpecifiedVariationValue(VariationName variation)
+        {
+            string toReturn = "";
             switch (variation)
             {
                 case (VariationName.omnited):
                 {
-                    this.VariationValue = null;
+                    toReturn = null;
                     break;
                 }
                 case (VariationName.plain):
                 {
-                    this.VariationValue = value;
+                    toReturn = this.ParameterValue;
                     break;
                 }
                 case (VariationName.spaceAfter):
                 {
-                    this.VariationValue = value + " ";
+                    toReturn = this.ParameterValue + " ";
                     break;
                 }
                 case (VariationName.spaceBefore):
                 {
-                    this.VariationValue = " " + value;
+                    toReturn = " " + this.ParameterValue;
                     break;
                 }
                 case (VariationName.spaceBoth):
                 {
-                    this.VariationValue = " " + value + " ";
+                    toReturn = " " + this.ParameterValue + " ";
                     break;
                 }
                 case (VariationName.empty):
                 {
-                    this.VariationValue = "";
+                    toReturn = "";
                     break;
                 }
                 default:
@@ -68,13 +89,14 @@ namespace Przelewy24InrernalTools.Crc
                         + variation.ToString());
                 }
             }
+            return toReturn;
         }
 
         #endregion
 
         #region Static Methods
 
-        public static ParameterVariation[] GetAllVariations (Parameter parameter)
+        public static ParameterVariation[] GetAllVariations (Przelewy24.Parameter parameter)
         {
             return GetAllVariations (parameter.Name, parameter.Value);
         }
@@ -100,11 +122,15 @@ namespace Przelewy24InrernalTools.Crc
 
         #endregion
 
+        #region override
+
         public override string ToString()
         {
             string result = string.Format("ParameterName = {0}, ParameterValue = {1}, Variation = {2}, VariationValuee = {3}",
                 this.ParameterName, this.ParameterValue, this.Variation.ToString(), this.VariationValue);
             return result;
         }
+
+        #endregion
     }
 }
