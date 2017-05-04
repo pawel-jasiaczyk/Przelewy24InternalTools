@@ -9,10 +9,24 @@ namespace Przelewy24InrernalTools.Crc
 {
     public class ParameterVariation
     {
+        #region Fields
+
+        private VariationName variation;
+
+        #endregion
+        
         #region Properties
 
         public string ParameterName { get; private set; }
-        public VariationName Variation { get; private set; }
+        public VariationName Variation
+        {
+            get { return variation; }
+            set
+            {
+                variation = value;
+                VariationValue = GetSpecifiedVariationValue(value);
+            }
+        }
         public string ParameterValue { get; private set; }
         public string VariationValue { get; private set; }
         public bool DoTest { get; set; }
