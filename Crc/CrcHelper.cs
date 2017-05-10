@@ -7,7 +7,7 @@ using Przelewy24;
 
 namespace Przelewy24InrernalTools.Crc
 {
-    public class CrcHelper
+    public class CrcHelper : Przelewy24.Przelewy24
     {
         public string TestedCrc { get; set; }
         
